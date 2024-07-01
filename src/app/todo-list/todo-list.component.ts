@@ -80,5 +80,8 @@ export class TodoListComponent implements OnInit {
       this.newTodoTitle = '';
     }
   }
-  
+
+  toggleCompleted(todo: Todo): void {
+    todo.completed = !todo.completed;
+  }
 }

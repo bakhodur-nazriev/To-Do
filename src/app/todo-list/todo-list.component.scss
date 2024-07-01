@@ -7,8 +7,27 @@
 }
 
 .search-wrapper {
+  position: relative;
   display: flex;
+  align-items: center;
   justify-content: center;
+  margin-bottom: 30px;
+
+  .search-icon {
+    position: absolute;
+    left: 85px;
+    height: 24px;
+  }
+
+  .search-input {
+    border-radius: 8px;
+    width: 70%;
+    height: 40px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    padding: 10px 45px 10px;
+  }
 }
 
 .todo-title {
@@ -52,100 +71,6 @@
 
 .completed {
   text-decoration: line-through;
-}
-
-.search-input {
-  border-radius: 8px;
-  margin-bottom: 25px;
-  width: 60%;
-  height: 40px;
-  font-size: 16px;
-  border: none;
-  outline: none;
-  padding: 10px 15px;
-}
-
-.checkbox {
-  --border-default: #bbbbc1;
-  --border-hover: #9898a3;
-  --active: #6e7bf2;
-  --active-tick: #ffffff;
-  display: block;
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-  position: relative;
-  -webkit-tap-highlight-color: transparent;
-  svg {
-    display: block;
-    position: absolute;
-  }
-  input {
-    display: block;
-    outline: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    border-radius: 36% / 36%;
-    box-shadow: inset 0 0 0 1.5px var(--border, var(--border-default));
-    background: var(--background, transparent);
-    transition: background 0.25s linear, box-shadow 0.25s linear;
-    & + svg {
-      width: 21px;
-      height: 18px;
-      left: 0;
-      top: 0;
-      color: var(--active);
-      .tick {
-        stroke-dasharray: 20;
-        stroke-dashoffset: var(--stroke-dashoffset, 20);
-        transition: stroke-dashoffset 0.2s;
-        &.mask {
-          stroke: var(--active-tick);
-        }
-      }
-      & + svg {
-        width: 11px;
-        height: 11px;
-        fill: none;
-        stroke: var(--active);
-        stroke-width: 1.25;
-        stroke-linecap: round;
-        top: -6px;
-        right: -10px;
-        stroke-dasharray: 4.5px;
-        stroke-dashoffset: 13.5px;
-        pointer-events: none;
-        animation: var(--animation, none) 0.2s ease 0.175s;
-      }
-    }
-    &:checked {
-      --background: var(--active);
-      --border: var(--active);
-      & + svg {
-        --stroke-dashoffset: 0;
-        & + svg {
-          --animation: check;
-        }
-      }
-    }
-  }
-  &:hover {
-    input {
-      &:not(:checked) {
-        --border: var(--border-hover);
-      }
-    }
-  }
-}
-
-@keyframes check {
-  100% {
-    stroke-dashoffset: 4.5px;
-  }
 }
 
 .add-todo {
@@ -230,4 +155,89 @@
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
+}
+
+.checkbox {
+  --border: #d1d6ee;
+  --border-hover: #bbc1e1;
+  --border-active: #6e7bf2;
+  --tick: #fff;
+  position: relative;
+  input,
+  svg {
+    width: 21px;
+    height: 21px;
+    display: block;
+  }
+  input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    position: relative;
+    outline: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: box-shadow 0.3s;
+    box-shadow: inset 0 0 0 var(--s, 1px) var(--b, var(--border));
+    &:hover {
+      --s: 2px;
+      --b: var(--border-hover);
+    }
+    &:checked {
+      --b: var(--border-active);
+    }
+  }
+  svg {
+    pointer-events: none;
+    fill: none;
+    stroke-width: 2px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke: var(--stroke, var(--border-active));
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 21px;
+    height: 21px;
+    transform: scale(var(--scale, 1)) translateZ(0);
+  }
+  &.path {
+    input {
+      &:checked {
+        --s: 2px;
+        transition-delay: 0.4s;
+        & + svg {
+          --a: 16.1 86.12;
+          --o: 102.22;
+        }
+      }
+    }
+    svg {
+      stroke-dasharray: var(--a, 86.12);
+      stroke-dashoffset: var(--o, 86.12);
+      transition: stroke-dasharray 0.6s, stroke-dashoffset 0.6s;
+    }
+  }
+  &.bounce {
+    --stroke: var(--tick);
+    input {
+      &:checked {
+        --s: 11px;
+        & + svg {
+          animation: bounce 0.2s linear forwards 0.2s;
+        }
+      }
+    }
+    svg {
+      --scale: 0;
+    }
+  }
+}
+
+@keyframes bounce {
+  100% {
+    transform: scale(1);
+  }
 }
