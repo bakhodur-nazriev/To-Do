@@ -1,4 +1,119 @@
-<div *ngFor="let todo of todos">
-  <h3>{{ todo.title }}</h3>
-  <p>Status: {{ todo.completed ? "Completed" : "Not Completed" }}</p>
-</div>
+<main class="main-block">
+  <div class="search-wrapper">
+    <input
+      type="search"
+      placeholder="Search"
+      class="search-input"
+      [(ngModel)]="searchTerm"
+      (input)="filterTodos()"
+    />
+  </div>
+
+  <div class="add-todo">
+    <input
+      type="text"
+      placeholder="New item"
+      class="add-input"
+      [(ngModel)]="newTodoTitle"
+    />
+    <button class="add-button" *ngIf="!editTodoId" (click)="addTodo()">
+      Add
+    </button>
+    <button class="save-button" *ngIf="editTodoId" (click)="updateTodo()">
+      Save
+    </button>
+    <button class="cancel-button" *ngIf="editTodoId" (click)="cancelEdit()">
+      Cancel
+    </button>
+  </div>
+
+  <ul class="main-todo-list">
+    <li
+      *ngFor="let todo of filteredTodos; let i = index"
+      class="main-todo-list__item"
+    >
+      <div class="left-side">
+        <label class="checkbox">
+          <!-- <input type="checkbox" [checked]="todo.completed" (change)="toggleCompleted(todo)" /> -->
+          <input type="checkbox" [checked]="todo.completed" />
+
+          <svg viewBox="0 0 21 18">
+            <symbol [attr.id]="'tick-path-' + i" viewBox="0 0 21 18">
+              <path
+                d="M5.22003 7.26C5.72003 7.76 7.57 9.7 8.67 11.45C12.2 6.05 15.65 3.5 19.19 1.69"
+                fill="none"
+                stroke-width="2.25"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </symbol>
+            <defs>
+              <mask id="tick">
+                <use class="tick mask" [attr.href]="'#tick-path-' + i"></use>
+              </mask>
+            </defs>
+            <use
+              class="tick"
+              [attr.href]="'#tick-path-' + i"
+              stroke="currentColor"
+            />
+            <path
+              fill="white"
+              mask="url(#tick)"
+              d="M18 9C18 10.4464 17.9036 11.8929 17.7589 13.1464C17.5179 15.6054 15.6054 17.5179 13.1625 17.7589C11.8929 17.9036 10.4464 18 9 18"
+            />
+          </svg>
+          <svg class="lines" viewBox="0 0 11 11">
+            <path d="M5.88086 5.89441L9.53504 4.26746" />
+            <path d="M5.5274 8.78838L9.45391 9.55161" />
+            <path d="M3.49371 4.22065L5.55387 0.79198" />
+          </svg>
+        </label>
+        <span class="todo-title" [class.completed]="todo.completed">
+          {{ todo.title }}
+        </span>
+      </div>
+
+      <div class="right-side">
+        <div class="tooltip">
+          <button type="button" (click)="startEdit(todo)">
+            <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z"
+                stroke="#fff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M11 4H6C4.93913 4 3.92178 4.42142 3.17163 5.17157C2.42149 5.92172 2 6.93913 2 8V18C2 19.0609 2.42149 20.0783 3.17163 20.8284C3.92178 21.5786 4.93913 22 6 22H17C19.21 22 20 20.2 20 18V13"
+                stroke="#fff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <span class="tooltiptext">Edit</span>
+        </div>
+
+        <div class="tooltip">
+          <button type="button" (click)="deleteTodo(todo.id)">
+            <svg
+              fill="#fff"
+              width="22px"
+              height="22px"
+              viewBox="-3.5 0 19 19"
+              class="cf-icon-svg"
+            >
+              <path
+                d="M11.383 13.644A1.03 1.03 0 0 1 9.928 15.1L6 11.172 2.072 15.1a1.03 1.03 0 1 1-1.455-1.456l3.928-3.928L.617 5.79a1.03 1.03 0 1 1 1.455-1.456L6 8.261l3.928-3.928a1.03 1.03 0 0 1 1.455 1.456L7.455 9.716z"
+              />
+            </svg>
+          </button>
+          <span class="tooltiptext">Delete</span>
+        </div>
+      </div>
+    </li>
+  </ul>
+</main>
